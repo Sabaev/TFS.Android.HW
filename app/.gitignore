@@ -1,5 +1,6 @@
 /build
 /app.iml
-.gradle
+*.gradle
+build.gradle
 
 *.pro
