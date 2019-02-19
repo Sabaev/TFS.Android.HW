@@ -5,5 +5,6 @@
     <string name="second_activity_title">Second Activity</string>
     <string name="btnStartIntentService">start IntentService</string>
     <string name="data_IsNotReceived">data isn\'t received</string>
+    <string name="contactsAreLoaded">Contacts are loaded</string>
 
 </resources>
