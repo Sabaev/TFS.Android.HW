@@ -2,6 +2,7 @@ package com.funtik.fintech
 
 import android.app.Activity
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         btnToSecondActivity = findViewById(R.id.btnToSecondActivity)
         btnToSecondActivity.setOnClickListener(this)
+
     }
 
     override fun onClick(p0: View?) {
@@ -35,13 +37,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         val result = data?.getSerializableExtra(ContactActivity.EXTRA_CONFIRM_DATA)
                         Toast.makeText(this,result.toString(),Toast.LENGTH_SHORT).show()
                     }
-                    Activity.RESULT_CANCELED -> { /* TODO */}
+                    Activity.RESULT_CANCELED -> { Toast.makeText(this,R.string.data_IsNotReceived,Toast.LENGTH_SHORT).show()}
                 }
             }
         }
     }
 
-    fun startContactActivityForResult(activity: Activity) {
+    private fun startContactActivityForResult(activity: Activity) {
         val intent = Intent(activity, ContactActivity::class.java)
         activity.startActivityForResult(intent, CONTACT_REQUEST_CODE)
     }
