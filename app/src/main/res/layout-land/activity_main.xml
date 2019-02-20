@@ -19,13 +19,12 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.976"/>
-    <ListView
-            android:layout_width="624dp"
-            android:layout_height="288dp" android:layout_marginBottom="8dp"
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="627dp"
+            android:layout_height="254dp" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/btnToSecondActivity" android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:id="@+id/lstNames" app:layout_constraintVertical_bias="0.441"
-            app:layout_constraintHorizontal_bias="0.494"/>
+            android:id="@+id/my_recycler_view"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

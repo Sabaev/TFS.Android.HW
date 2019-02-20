@@ -10,10 +10,10 @@ import android.widget.Button
 import android.widget.Toast
 import com.funtik.fintech.contacts.ContactActivity
 import android.content.pm.PackageManager
-import android.widget.ArrayAdapter
 import android.os.Build
-import android.os.PersistableBundle
 import android.widget.ListView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -28,9 +28,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var btnToSecondActivity: Button
     private lateinit var lstNames: ListView
 
-    // loaded contacts
-    private lateinit var contacts: ArrayList<String>
+    // loaded contacts, on start it's empty
+    private var contacts: ArrayList<String> = ArrayList()
     private val CONTACT_ON_BUNDLE = "contact"
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,8 +44,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnToSecondActivity = findViewById(R.id.btnToSecondActivity)
         btnToSecondActivity.setOnClickListener(this)
 
-        // Find the list view
-        lstNames = findViewById(R.id.lstNames)
+        createList()
 
     }
 
@@ -87,9 +90,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
                         contacts = data?.getSerializableExtra(ContactActivity.EXTRA_CONFIRM_DATA) as ArrayList<String>
-
+                        updList(contacts)
                         Toast.makeText(this, getString(R.string.contactsAreLoaded), Toast.LENGTH_SHORT).show()
-                        createList(contacts)
 
                     }
                     Activity.RESULT_CANCELED -> {
@@ -100,11 +102,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun createList(items: ArrayList<String>){
-        @Suppress("UNCHECKED_CAST") val adapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,items )
-        lstNames.adapter = adapter
+    private fun createList(){
+        viewManager = LinearLayoutManager(this)
 
+        viewAdapter = MyAdapter(contacts)
+
+        recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view).apply {
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            setHasFixedSize(true)
+
+            // use a linear layout manager
+            layoutManager = viewManager
+
+            // specify an viewAdapter (see also next example)
+            adapter = viewAdapter
+
+        }
     }
+
+    private fun updList(items: ArrayList<String>){
+        recyclerView.adapter = MyAdapter(contacts)
+    }
+
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
@@ -114,8 +134,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
         contacts = savedInstanceState?.getSerializable(CONTACT_ON_BUNDLE) as ArrayList<String>
-        createList(contacts)
+        updList(contacts)
     }
+
+
 
 
 }
