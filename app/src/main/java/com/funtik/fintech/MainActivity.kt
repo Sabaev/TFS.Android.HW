@@ -12,6 +12,7 @@ import com.funtik.fintech.contacts.ContactActivity
 import android.content.pm.PackageManager
 import android.widget.ArrayAdapter
 import android.os.Build
+import android.os.PersistableBundle
 import android.widget.ListView
 
 
@@ -22,9 +23,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
     private val CONTACT_REQUEST_CODE = 1
 
+
     // view
     private lateinit var btnToSecondActivity: Button
     private lateinit var lstNames: ListView
+
+    // loaded contacts
+    private lateinit var contacts: ArrayList<String>
+    private val CONTACT_ON_BUNDLE = "contact"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,11 +86,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             CONTACT_REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        val result = data?.getSerializableExtra(ContactActivity.EXTRA_CONFIRM_DATA)
+                        contacts = data?.getSerializableExtra(ContactActivity.EXTRA_CONFIRM_DATA) as ArrayList<String>
 
                         Toast.makeText(this, getString(R.string.contactsAreLoaded), Toast.LENGTH_SHORT).show()
-                        @Suppress("UNCHECKED_CAST") val adapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,result as ArrayList<String>)
-                        lstNames.adapter = adapter
+                        createList(contacts)
 
                     }
                     Activity.RESULT_CANCELED -> {
@@ -93,6 +98,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    private fun createList(items: ArrayList<String>){
+        @Suppress("UNCHECKED_CAST") val adapter = ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,items )
+        lstNames.adapter = adapter
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putSerializable(CONTACT_ON_BUNDLE,contacts)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        contacts = savedInstanceState?.getSerializable(CONTACT_ON_BUNDLE) as ArrayList<String>
+        createList(contacts)
     }
 
 
