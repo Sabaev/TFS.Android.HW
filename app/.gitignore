@@ -1,1 +1,10 @@
 /build
+/app.iml
+*.gradle
+build.gradle
+/src/androidTest
+/src/test
+/src/main/res/drawable*
+/src/main/res/mipmap*
+
+*.pro

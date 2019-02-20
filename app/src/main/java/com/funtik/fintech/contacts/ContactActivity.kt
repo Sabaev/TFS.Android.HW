@@ -40,10 +40,10 @@ class ContactActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(contactReceiver)
     }
 
-    // при получении данных Activity закрывается и от Сервиса передаются в первую Activity
+    // при получении данных Activity закрывается и данные от Сервиса передаются далее в первую Activity
     private val contactReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val result = intent.getStringExtra(ContactIntentService.RESULT_MSG)
+            val result = intent.getSerializableExtra(ContactIntentService.RESULT_MSG)
             Log.e(App.TAG, "Received message \"$result\"")
             val resultIntent = Intent().putExtra(EXTRA_CONFIRM_DATA, result)
             setResult(Activity.RESULT_OK, resultIntent)
