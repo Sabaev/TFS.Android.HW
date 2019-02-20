@@ -18,7 +18,7 @@ import android.widget.ListView
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
-    // Request code for READ_CONTACTS. It can be any number > 0.
+    // Request code for READ_CONTACTS. любой номер > 0.
     private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
     private val CONTACT_REQUEST_CODE = 1
 
@@ -46,13 +46,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     /**
-     * load the contacts from the second Activity.
+     * load the contacts from the second Activity and check permissions.
      */
     private fun loadContactsFromSecondActivity(activity: Activity) {
-        // Check the SDK version and whether the permission is already granted or not.
+        // Проверяем версию SDK  и есть ли разрешение.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.READ_CONTACTS), PERMISSIONS_REQUEST_READ_CONTACTS)
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+            //После данной точки, ждём обратный вызов в onRequestPermissionsResult(int, String[], int[]) переопрёделённый метод
         } else {
             val intent = Intent(activity, ContactActivity::class.java)
             startActivityForResult(intent, CONTACT_REQUEST_CODE)
@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 // Permission is granted
                 loadContactsFromSecondActivity(this)
             } else {
-                Toast.makeText(this, "Until you grant the permission, we canot display the names", Toast.LENGTH_SHORT)
+                Toast.makeText(this, getString(R.string.permissionNotGranted), Toast.LENGTH_SHORT)
                     .show()
             }
         }

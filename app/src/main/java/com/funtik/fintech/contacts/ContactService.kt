@@ -26,6 +26,8 @@ class ContactIntentService: IntentService("ContactIntentService") {
         Log.e(App.TAG, "Finish IntentService")
 
         val broadcastIntent = Intent(ContactActivity.TAKE_CONTACTS_ACTION)
+        // есть ограничение на 50 кб при передаче данных через интент, но в данный момент мы передаём только имя,
+        // что уменьшает вероятность ошибки, но не исключает
         broadcastIntent.putExtra(RESULT_MSG, contracts )
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
 
@@ -38,22 +40,22 @@ class ContactIntentService: IntentService("ContactIntentService") {
      */
     private fun getContacts(): ArrayList<String> {
         val contacts = ArrayList<String>()
-        // Get the ContentResolver
+        // Получем  ContentResolver
         val cr = contentResolver
-        // Get the Cursor of all the contacts
+        // Получаем курсор на все контакты
         val cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
 
-        // Move the cursor to first. Also check whether the cursor is empty or not.
+        // Перемещаем курсор на первый элемент. И проверяем пустой он или нет.
         if (cursor!!.moveToFirst()) {
-            // Iterate through the cursor
+            // Итерируемся по курсору
             do {
-                // Get the contacts name
-                val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                // Получаем имя (предусмотрен отдельный класс для контакта на будущее)) )
 //                val phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
                 contacts.add(name)
             } while (cursor.moveToNext())
         }
-        // Close the cursor
+        // Закрываем курсор
         cursor.close()
 
         return contacts

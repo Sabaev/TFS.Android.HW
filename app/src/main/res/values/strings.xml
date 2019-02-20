@@ -6,5 +6,6 @@
     <string name="btnStartIntentService">start IntentService</string>
     <string name="data_IsNotReceived">data isn\'t received</string>
     <string name="contactsAreLoaded">Contacts are loaded</string>
+    <string name="permissionNotGranted">Until you grant the permission, we can\'t display the names</string>
 
 </resources>
